@@ -80,7 +80,7 @@ class Teacher
     private $lessonTypes;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"}
+     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
      * @ORM\Column(nullable=true)
      */
     private $user;
