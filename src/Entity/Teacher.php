@@ -80,26 +80,19 @@ class Teacher
     private $lessonTypes;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, cascade={"persist", "remove"})
-     * @ORM\Column(nullable=true)
+     * @ORM\OneToMany(targetEntity=Review::class, mappedBy="teacher")
      */
-    private $user;
+    private $reviews;
 
     /**
-     * @ORM\OneToOne(targetEntity=Subject::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Subject::class)
      */
     private $subject;
 
     /**
-     * @ORM\OneToOne(targetEntity=City::class, cascade={"persist", "remove"})
-     * @ORM\Column(nullable=true)
+     * @ORM\ManyToOne(targetEntity=City::class, inversedBy="teachers")
      */
     private $city;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Review::class, mappedBy="teacher")
-     */
-    private $reviews;
 
     public function __construct()
     {
@@ -274,42 +267,6 @@ class Teacher
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getSubject(): ?Subject
-    {
-        return $this->subject;
-    }
-
-    public function setSubject(?Subject $subject): self
-    {
-        $this->subject = $subject;
-
-        return $this;
-    }
-
-    public function getCity(): ?City
-    {
-        return $this->city;
-    }
-
-    public function setCity(?City $city): self
-    {
-        $this->city = $city;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Review>
      */
@@ -336,6 +293,30 @@ class Teacher
                 $review->setTeacher(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSubject(): ?Subject
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?Subject $subject): self
+    {
+        $this->subject = $subject;
+
+        return $this;
+    }
+
+    public function getCity(): ?City
+    {
+        return $this->city;
+    }
+
+    public function setCity(?City $city): self
+    {
+        $this->city = $city;
 
         return $this;
     }
