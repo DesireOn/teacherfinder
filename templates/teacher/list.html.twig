@@ -18,7 +18,8 @@
                             <select class="form-control js-reviews-sort" name="reviewsSort" id="reviews-sort">
                                 <option value="highest" {% if orderBy == 'highest' %}selected{% endif %}>Най - висок рейтинг</option>
                                 <option value="lowest" {% if orderBy == 'lowest' %}selected{% endif %}>Най - нисък рейтинг</option>
-                                <option value="mostRated" {% if orderBy == 'mostRated' %}selected{% endif %}>Брой отзиви</option>
+                                <option value="cheapest" {% if orderBy == 'cheapest' %}selected{% endif %}>Най - ниска цена за час</option>
+                                <option value="mostExpensive" {% if orderBy == 'mostExpensive' %}selected{% endif %}>Най - висока цена за час</option>
                             </select>
                         </div>
                     </div>
