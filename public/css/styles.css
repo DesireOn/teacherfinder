@@ -1,0 +1,331 @@
+body {
+    position: relative;
+    background: #efefee;
+    min-height: 45rem;
+    padding-bottom: 80px;
+}
+
+html {height:100%}
+
+/* NAVIGATION */
+
+.navbar-bg {
+    background: url('../images/driving-school-nav.jpg');
+    background-size: 100%;
+}
+
+.dropdown-menu, .dropdown-menu.show {
+    right: 0;
+}
+
+.space-brand {
+    color: #000000;
+    font-weight: bold;
+}
+
+.nav-profile-img {
+    width: 50px;
+    border: 1px solid #fff;
+}
+
+
+/* LOGIN REGISTRATION */
+
+.form-container {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+}
+
+.inactive {
+    border-color: lightgray lightgray lightgray;
+    background: darkgray;
+    color: #fff;
+}
+
+.nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover {
+    color: #efefee;
+}
+
+/* ADVERTISEMENT */
+
+.ad-space {
+    background: #fff;
+    border-radius: 5px;
+    border-top: 5px solid green;
+}
+
+.advertisement-img {
+    width: 150px;
+    height: auto;
+    border: 2px solid #efefee;
+    border-radius: 5px;
+}
+
+.advertisement-text {
+    font-weight: bold;
+}
+
+.quote-space {
+    background: #fff;
+    margin-top: 30px;
+    border-radius: 5px;
+    border-top: 5px solid blueviolet;
+}
+
+.blog-post-homepage {
+    background: #fff;
+    margin-top: 30px;
+    border-radius: 5px;
+    border-top: 5px solid lightblue;
+}
+
+.schools-homepage {
+    background: #fff;
+    margin-top: 30px;
+    border-radius: 5px;
+    border-top: 5px solid crimson;
+}
+
+/* ARTICLES */
+
+.main-article {
+    border: 2px solid #efefee;
+    Background: #fff;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.main-article img {
+    width: 100%;
+    height: 484px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top: 5px solid lightblue;
+}
+
+.article-container {
+    border: 1px solid #efefee;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    background: #fff;
+}
+
+.main-article-link, .article-container a {
+    text-decoration: none;
+    color: #000;
+}
+
+.main-article-link:hover {
+    text-decoration: none;
+    color: #000;
+}
+
+.article-title {
+    min-width: 300px;
+
+}
+
+@media (max-width: 440px) {
+    .article-title {
+        min-width: 100px;
+        max-width: 245px;
+    }
+}
+
+.article-img {
+    height: 80px;
+    width: 190px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+.article-author-img {
+    height: 25px;
+    border: 1px solid darkgray;
+}
+
+.article-details {
+    font-size: .8em;
+}
+
+/* PROFILE */
+
+.profile-img {
+    width: 150px;
+    height: auto;
+    border: 2px solid #fff;
+}
+
+.profile-name {
+    font-size: 1.5em;
+}
+
+.my-article-container {
+    background: #FFBC49;
+    border: solid 1px #efefee;
+    border-radius: 5px;
+}
+
+/* Article page */
+.blog-post-container {
+    margin-left: 25px;
+}
+
+.blog-post-date {
+    float: left;
+    margin-right: 10px;
+    text-align: center;
+}
+
+.blog-post-day {
+    background: #f7f7f7;
+    color: #17a2b8;
+    border-radius: 2px 2px 0 0;
+    display: block;
+    font-size: 18px;
+    font-weight: 900;
+    padding: 10px;
+}
+
+.blog-post-month {
+    background: #17a2b8;
+    display: block;
+    border-radius: 2px 2px 0 0;
+    color: #fff;
+    font-size: .8em;
+    line-height: 1.8;
+    padding: 1px 10px;
+    text-transform: uppercase;
+}
+
+h1.font-weight-semi-bold {
+    margin-bottom: 5px;
+    color: #17a2b8;
+    font-size: 2.2em;
+}
+
+.blog-post-meta {
+    margin-bottom: 20px;
+    font-size: .9em;
+}
+
+/* Articles listing */
+.post-element {
+    margin-bottom: 1.5rem;
+}
+
+.font-weight-semi-bold, .font-weight-semibold {
+    font-weight: 600!important;
+}
+.line-height-6 {
+    line-height: 1.6!important;
+}
+.text-5 {
+    font-size: 1.5em!important;
+}
+
+/* CREATE ARTICLE */
+
+.create-article-container {
+    min-width: 400px;
+    background-color: lightblue;
+    border-radius: 5px;
+}
+
+/* ARTICLE SHOW PAGE */
+
+.show-article-container {
+    width: 100%;
+    background-color: #fff;
+}
+
+.show-article-img {
+    width: 250px;
+    height: 98px;
+    border-radius: 5px;
+}
+
+.show-article-title {
+    font-size: 2em;
+}
+
+.like-article, .like-article:hover {
+    color: red;
+    text-decoration: none;
+}
+
+@media (max-width: 991px) {
+    .show-article-title {
+        font-size: 1.5em;
+    }
+
+    .show-article-title-container {
+        max-width: 220px;
+    }
+}
+
+.article-text {
+    margin-top: 20px;
+}
+
+.share-icons i {
+    font-size: 1.5em;
+}
+
+.comment-img {
+    width: 50px;
+    height: auto;
+    border: 1px solid darkgray;
+}
+
+.commenter-name {
+    font-weight: bold;
+}
+
+.comment-form {
+    min-width: 500px;
+}
+
+@media (max-width: 767px) {
+    .comment-form {
+        min-width: 260px;
+    }
+}
+
+
+
+/* FOOTER */
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 60px; /* Set the fixed height of the footer here */
+  line-height: 60px; /* Vertically center the text there */
+  background-color: #fff;
+  margin-top: 10px;
+}
+
+/* Input file */
+.custom-file {
+    position: relative;
+    display: block;
+    max-width: 100%;
+    height: calc(2.25rem + 2px);
+    margin-bottom: 0;
+}
+
+.custom-file-input {
+    min-width: 14rem;
+    max-width: 100%;
+    height: calc(2.25rem + 2px);
+    margin: 0;
+    opacity: 1;
+}
+
+/* Star checked */
+.star-checked {
+    color: #dc3545;
+}
