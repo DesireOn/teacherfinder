@@ -42,7 +42,7 @@ class TeacherFixtures extends Fixture implements DependentFixtureInterface
                 'gender' => 'f'
             ],
             [
-                'name' => 'Мария Димитров',
+                'name' => 'Мария Димитрова',
                 'logo' => 'maria.jpg',
                 'email' => 'maria@gmail.com',
                 'phone' => '0895029342',
