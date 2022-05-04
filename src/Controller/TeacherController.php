@@ -26,7 +26,7 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/teacher/list", name="app_teacher")
+     * @Route("/teacher/list", name="teacher_list")
      */
     public function list(Request $request): Response
     {
