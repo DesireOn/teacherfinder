@@ -33,6 +33,30 @@
                                     <span class="article-details"> Телефон: <b>{{ teacher.phone }}</b></span>
                                     <br>
                                     <span class="article-details"> Имейл: <b>{{ teacher.email }}</b></span>
+                                    <br>
+                                    <span class="article-details"> Начини на обучение:
+                                        {% if teacher.lessonTypes|length == 1 %}
+                                            {% if teacher.lessonTypes|first.type == 'online' %}
+                                                <b>Онлайн</b>
+                                            {% else %}
+                                                <b>Присъствено</b>
+                                            {% endif %}
+                                        {% else %}
+                                            {% set firstType = teacher.lessonTypes[0] %}
+                                            {% set secondType = teacher.lessonTypes[1] %}
+                                            {% if firstType.type == 'online' %}
+                                                <b>Онлайн, </b>
+                                                {% else %}
+                                                <b>Присъствено, </b>
+                                            {% endif %}
+
+                                            {% if secondType.type == 'online' %}
+                                                <b>Онлайн</b>
+                                                {% else %}
+                                                <b>Присъствено</b>
+                                            {% endif %}
+                                        {% endif %}
+                                    </span>
                                 </div>
                             </a>
                         </div>
