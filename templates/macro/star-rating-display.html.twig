@@ -1,0 +1,53 @@
+{% macro renderRating(rating) %}
+    <span class="align-left article-details">
+        {% if rating|default and rating|round(0, 'floor') == 1 %}
+            <span class="fa fa-star star-checked"></span>
+            {% if rating > 1.00 %}
+                <span class="fa fa-star-half-o star-checked"></span>
+            {% else %}
+                <span class="fa fa-star"></span>
+            {% endif %}
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+        {% elseif rating|default and rating|round(0, 'floor') == 2 %}
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            {% if rating > 2.00 %}
+                <span class="fa fa-star-half-o star-checked"></span>
+            {% else %}
+                <span class="fa fa-star"></span>
+            {% endif %}
+            <span class="fa fa-star"></span>
+            <span class="fa fa-star"></span>
+        {% elseif rating|default and rating|round(0, 'floor') == 3 %}
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            {% if rating > 3.00 %}
+                <span class="fa fa-star-half-o star-checked"></span>
+            {% else %}
+                <span class="fa fa-star"></span>
+            {% endif %}
+            <span class="fa fa-star"></span>
+        {% elseif rating|default and rating|round(0, 'floor') == 4 %}
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            {% if rating > 4.00 %}
+                <span class="fa fa-star-half-o star-checked"></span>
+            {% else %}
+                <span class="fa fa-star"></span>
+            {% endif %}
+        {% elseif rating|default and rating|round(0, 'floor') == 5 %}
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+            <span class="fa fa-star star-checked"></span>
+        {% else %}
+            Няма рейтинг
+        {% endif %}
+    </span>
+{% endmacro %}
