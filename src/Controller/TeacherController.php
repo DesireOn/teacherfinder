@@ -53,9 +53,26 @@ class TeacherController extends AbstractController
 
     public function sortTeachers(string $filter): array
     {
-        return [
-            'property' => 't.rating',
-            'criteria' => 'DESC'
-        ];
+        if ($filter === 'highest') {
+            return [
+                'property' => 't.rating',
+                'criteria' => 'DESC'
+            ];
+        } elseif ($filter === 'lowest') {
+            return [
+                'property' => 't.rating',
+                'criteria' => 'ASC'
+            ];
+        } elseif ($filter === 'cheapest') {
+            return [
+                'property' => 't.pricePerHour',
+                'criteria' => 'ASC'
+            ];
+        } else {
+            return [
+                'property' => 't.pricePerHour',
+                'criteria' => 'DESC'
+            ];
+        }
     }
 }
