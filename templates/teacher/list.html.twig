@@ -1,19 +1,66 @@
 {% extends 'base.html.twig' %}
+{% import "macro/star-rating-display.html.twig" as starRatingDisplay %}
 
-{% block title %}Hello TeacherController!{% endblock %}
+{% block title %}Нашите учители{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="show-article-container p-3 mt-4 float-left">
+                    <h1 class="text-center pb-3">Учители</h1>
+                    <div class="row">
+                        <div class="col-9">
+                            <h3>Общо: {{ pagerfanta.nbResults }}</h3>
+                        </div>
+                        <div class="col-3 form-group float-right">
+                            <select class="form-control js-reviews-sort" name="reviewsSort" id="reviews-sort">
+                                <option value="highest" {% if orderBy == 'highest' %}selected{% endif %}>Най - висок рейтинг</option>
+                                <option value="lowest" {% if orderBy == 'lowest' %}selected{% endif %}>Най - нисък рейтинг</option>
+                                <option value="mostRated" {% if orderBy == 'mostRated' %}selected{% endif %}>Брой отзиви</option>
+                            </select>
+                        </div>
+                    </div>
+                    {% for teacher in teachers %}
+                        <div class="article-container my-1">
+                            <a href="#">
+                                <img width="147" class="article-img" src="{{ asset('images/teacher-pics/' ~ teacher.logo) }}">
+                                <div class="article-title d-inline-block pl-3 align-middle">
+                                    <span>{{ teacher.name }}</span>
+                                    {{ starRatingDisplay.renderRating(teacher.rating) }} {% if teacher.rating > 1 %}({{ teacher.rating }} - базирано на {{ teacher.activeReviewsCount }} отзива){% endif %}
+                                    <br>
+                                    <span class="article-details"> Телефон: <b>{{ teacher.phone }}</b></span>
+                                    <br>
+                                    <span class="article-details"> Имейл: <b>{{ teacher.email }}</b></span>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    {% if pagerfanta.haveToPaginate %}
+                        <div class="float-right pt-3">
+                            <ul class="pagination">
+                                {% for i in 1..pagerfanta.getNbPages %}
+                                    <li class="page-item {{ pagerfanta.currentPage == i ? 'disabled' : '' }}"><a class="page-link" href="{{ path('teacher_list') }}?page={{ i }}&orderBy={{ orderBy }}">{{ i }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" class="js-teachers-route" id="teachers-route" name="teachersRoute" value="{{ path('teacher_list') }}">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/petar/projects/teacherfinder/src/Controller/TeacherController.php'|file_link(0) }}">src/Controller/TeacherController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/petar/projects/teacherfinder/templates/teacher/index.html.twig'|file_link(0) }}">templates/teacher/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script>
+        $( document ).ready(function() {
+            $( ".js-reviews-sort" ).change(function() {
+                let url = document.getElementsByClassName('js-teachers-route')[0].value + '?orderBy=' + this.value;
+                window.location.replace(url);
+            });
+        });
+    </script>
 {% endblock %}
