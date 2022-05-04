@@ -4,8 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Teacher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,5 +44,20 @@ class TeacherRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    /**
+     * @param string $teacherStatus
+     * @param array $orderBy
+     * @return QueryBuilder
+     */
+    public function findTeachersByStatusBuilder(string $teacherStatus, array $orderBy): QueryBuilder
+    {
+        return
+            $this->createQueryBuilder('t')
+                ->andWhere('t.status = :teacherStatus')
+                ->setParameter('teacherStatus', $teacherStatus)
+                ->orderBy($orderBy['property'], $orderBy['criteria'])
+            ;
     }
 }
