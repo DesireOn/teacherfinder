@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Teacher;
+use App\Filter\TeacherFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,17 +49,51 @@ class TeacherRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param string $teacherStatus
      * @param array $orderBy
+     * @param TeacherFilter $filter
      * @return QueryBuilder
      */
-    public function findTeachersByStatusBuilder(string $teacherStatus, array $orderBy): QueryBuilder
+    public function findTeachersByFilterBuilder(array $orderBy, TeacherFilter $filter): QueryBuilder
     {
-        return
-            $this->createQueryBuilder('t')
-                ->andWhere('t.status = :teacherStatus')
-                ->setParameter('teacherStatus', $teacherStatus)
-                ->orderBy($orderBy['property'], $orderBy['criteria'])
-            ;
+        $queryBuilder = $this->createQueryBuilder('t')
+            ->andWhere('t.status = :teacherStatus')
+            ->setParameter('teacherStatus', 'approved')
+            ->orderBy($orderBy['property'], $orderBy['criteria'])
+        ;
+
+        if (!is_null($filter->getLessonType())) {
+            $queryBuilder->innerJoin(
+                't.lessonTypes', 'lt', Join::WITH, 'lt.type = :lessonType'
+            );
+            $queryBuilder->setParameter('lessonType', $filter->getLessonType());
+        }
+
+        if (!is_null($filter->getCity())) {
+            $queryBuilder->andWhere('t.city = :city');
+            $queryBuilder->setParameter('city', $filter->getCity());
+        }
+
+        if (!is_null($filter->getMinPrice())) {
+            $queryBuilder->andWhere('t.pricePerHour >= :minPrice');
+            $queryBuilder->setParameter('minPrice', $filter->getMinPrice());
+        }
+
+        if (!is_null($filter->getMaxPrice())) {
+            $queryBuilder->andWhere('t.pricePerHour <= :maxPrice');
+            $queryBuilder->setParameter('maxPrice', $filter->getMaxPrice());
+        }
+
+        if (!is_null($filter->getGender()) && $filter->getGender() !== 'all') {
+            $queryBuilder->andWhere('t.gender = :gender');
+            $queryBuilder->setParameter('gender', $filter->getGender());
+        }
+
+        if (!is_null($filter->getSubject())) {
+            $queryBuilder->andWhere('t.subject = :subject');
+            $queryBuilder->setParameter('subject', $filter->getSubject());
+        }
+
+        return $queryBuilder;
+
     }
 }

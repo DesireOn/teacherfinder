@@ -31,9 +31,9 @@
                                     <span>{{ teacher.name }}</span>
                                     {{ starRatingDisplay.renderRating(teacher.rating) }} {% if teacher.rating > 1 %}({{ teacher.rating }} - базирано на {{ teacher.activeReviewsCount }} отзива){% endif %}
                                     <br>
-                                    <span class="article-details"> Телефон: <b>{{ teacher.phone }}</b></span>
+                                    <span class="article-details"> Предмет: <b>{{ teacher.subject.name }}</b></span>
                                     <br>
-                                    <span class="article-details"> Имейл: <b>{{ teacher.email }}</b></span>
+                                    <span class="article-details"> Град: <b>{{ teacher.city.name }}</b></span>
                                     <br>
                                     <span class="article-details"> Начини на обучение:
                                         {% if teacher.lessonTypes|length == 1 %}

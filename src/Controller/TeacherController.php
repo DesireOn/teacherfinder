@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Filter\TeacherFilter;
 use App\Repository\TeacherRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -28,12 +29,14 @@ class TeacherController extends AbstractController
     /**
      * @Route("/teacher/list", name="teacher_list")
      */
-    public function list(Request $request): Response
+    public function list(Request $request, TeacherFilter $teacherFilter): Response
     {
         $requestOrderBy = $request->get('orderBy') ?: 'highest';
-        $orderBy = $this->sortTeachers($requestOrderBy);
+        $orderByCriteria = $this->sortTeachers($requestOrderBy);
 
-        $qb = $this->teacherRepository->findTeachersByStatusBuilder('approved', $orderBy);
+        $filter = $teacherFilter->fromArray($request->query->all());
+
+        $qb = $this->teacherRepository->findTeachersByFilterBuilder($orderByCriteria, $filter);
         $adapter = new QueryAdapter($qb);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(5);
