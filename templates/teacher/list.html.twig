@@ -9,6 +9,110 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="show-article-container p-3 mt-4 float-left">
+                    <h1 class="text-center pb-3">Филтри</h1>
+                    <div class="row search-tabs">
+                        <div class="col-sm-6 text-center pb-3">
+                            <a class="{% if app.request.get('lessonType')|default != 'in-person' %}active{% endif %}"
+                               href="{{ path('teacher_list', {
+                                   lessonType: 'online',
+                                   minPrice: app.request.get('minPrice')|default,
+                                   maxPrice: app.request.get('maxPrice')|default,
+                                   gender: app.request.get('gender')|default,
+                                   subjectId: app.request.get('subjectId')|default,
+                                   orderBy: orderBy
+                               }) }}">Онлайн</a>
+                        </div>
+                        <div class="col-sm-6 text-center pb-3">
+                            <a class="{% if app.request.get('lessonType')|default == 'in-person' %}active{% endif %}"
+                               href="{{ path('teacher_list', {
+                                   lessonType: 'in-person',
+                                   cityId: app.request.get('cityId')|default,
+                                   minPrice: app.request.get('minPrice')|default,
+                                   maxPrice: app.request.get('maxPrice')|default,
+                                   gender: app.request.get('gender')|default,
+                                   subjectId: app.request.get('subjectId')|default,
+                                   orderBy: orderBy
+                               }) }}">Присъствено</a>
+                        </div>
+                    </div>
+                    <form action="" method="get">
+                        <div class="row">
+                            {% if app.request.get('lessonType')|default == 'online' %}
+                                <div class="col-12 form-group pt-3">
+                                    <select class="form-control" name="subjectId" id="subject">
+                                        <option value="">Всички предмети</option>
+                                        {% for subject in subjects %}
+                                            <option value="{{ subject.id }}" {% if subject.id == app.request.get('subjectId')|default %}selected{% endif %}>{{ subject.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% else %}
+                                <div class="col-6 form-group float-left pt-3">
+                                    <select class="form-control" name="subjectId" id="subject">
+                                        <option value="">Всички предмети</option>
+                                        {% for subject in subjects %}
+                                            <option value="{{ subject.id }}" {% if subject.id == app.request.get('subjectId')|default %}selected{% endif %}>{{ subject.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-6 form-group float-left pt-3">
+                                    <select class="form-control" name="cityId" id="city">
+                                        <option value="">Всички градове</option>
+                                        {% for city in cities %}
+                                            <option value="{{ city.id }}" {% if city.id == app.request.get('cityId')|default %}selected{% endif %}>{{ city.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Цена от</span>
+                                    </div>
+                                    <input type="number" name="minPrice" class="form-control" value="{{ app.request.get('minPrice')|default }}">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">лв</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Цена до</span>
+                                    </div>
+                                    <input type="number" name="maxPrice" class="form-control" value="{{ app.request.get('maxPrice')|default }}">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">лв</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <select class="form-control" name="gender" id="gender">
+                                    <option value="">Всички полове</option>
+                                    <option value="f" {% if 'f' == app.request.get('gender')|default %}selected{% endif %}>Жена</option>
+                                    <option value="m" {% if 'm' == app.request.get('gender')|default %}selected{% endif %}>Мъж</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-primary">Търси</button>
+                                <a href="{{ path('teacher_list', {lessonType: app.request.get('lessonType')}) }}" class="btn btn-secondary">Изчисти</a>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="lessonType" value="{{ app.request.get('lessonType')|default }}">
+                        <input type="hidden" name="orderBy" value="{{ orderBy }}">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="show-article-container p-3 mt-4 float-left">
                     <h1 class="text-center pb-3">Учители</h1>
                     <div class="row">
                         <div class="col-9">
@@ -69,7 +173,7 @@
                         <div class="float-right pt-3">
                             <ul class="pagination">
                                 {% for i in 1..pagerfanta.getNbPages %}
-                                    <li class="page-item {{ pagerfanta.currentPage == i ? 'disabled' : '' }}"><a class="page-link" href="{{ path('teacher_list') }}?page={{ i }}&orderBy={{ orderBy }}">{{ i }}</a></li>
+                                    <li class="page-item {{ pagerfanta.currentPage == i ? 'disabled' : '' }}"><a class="page-link" href="{{ app.request.uri }}&page={{ i }}">{{ i }}</a></li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -78,7 +182,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" class="js-teachers-route" id="teachers-route" name="teachersRoute" value="{{ path('teacher_list') }}">
+    <input type="hidden" class="js-teachers-route" id="teachers-route" name="teachersRoute" value="{{ app.request.uri }}">
 
 {% endblock %}
 {% block javascripts %}
@@ -86,7 +190,7 @@
     <script>
         $( document ).ready(function() {
             $( ".js-reviews-sort" ).change(function() {
-                let url = document.getElementsByClassName('js-teachers-route')[0].value + '?orderBy=' + this.value;
+                let url = document.getElementsByClassName('js-teachers-route')[0].value + '&orderBy=' + this.value;
                 window.location.replace(url);
             });
         });
