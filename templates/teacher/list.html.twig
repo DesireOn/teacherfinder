@@ -1,19 +1,198 @@
 {% extends 'base.html.twig' %}
+{% import "macro/star-rating-display.html.twig" as starRatingDisplay %}
 
-{% block title %}Hello TeacherController!{% endblock %}
+{% block title %}Нашите учители{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="show-article-container p-3 mt-4 float-left">
+                    <h1 class="text-center pb-3">Филтри</h1>
+                    <div class="row search-tabs">
+                        <div class="col-sm-6 text-center pb-3">
+                            <a class="{% if app.request.get('lessonType')|default != 'in-person' %}active{% endif %}"
+                               href="{{ path('teacher_list', {
+                                   lessonType: 'online',
+                                   minPrice: app.request.get('minPrice')|default,
+                                   maxPrice: app.request.get('maxPrice')|default,
+                                   gender: app.request.get('gender')|default,
+                                   subjectId: app.request.get('subjectId')|default,
+                                   orderBy: orderBy
+                               }) }}">Онлайн</a>
+                        </div>
+                        <div class="col-sm-6 text-center pb-3">
+                            <a class="{% if app.request.get('lessonType')|default == 'in-person' %}active{% endif %}"
+                               href="{{ path('teacher_list', {
+                                   lessonType: 'in-person',
+                                   cityId: app.request.get('cityId')|default,
+                                   minPrice: app.request.get('minPrice')|default,
+                                   maxPrice: app.request.get('maxPrice')|default,
+                                   gender: app.request.get('gender')|default,
+                                   subjectId: app.request.get('subjectId')|default,
+                                   orderBy: orderBy
+                               }) }}">Присъствено</a>
+                        </div>
+                    </div>
+                    <form action="" method="get">
+                        <div class="row">
+                            {% if app.request.get('lessonType')|default == 'online' %}
+                                <div class="col-12 form-group pt-3">
+                                    <select class="form-control" name="subjectId" id="subject">
+                                        <option value="">Всички предмети</option>
+                                        {% for subject in subjects %}
+                                            <option value="{{ subject.id }}" {% if subject.id == app.request.get('subjectId')|default %}selected{% endif %}>{{ subject.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% else %}
+                                <div class="col-6 form-group float-left pt-3">
+                                    <select class="form-control" name="subjectId" id="subject">
+                                        <option value="">Всички предмети</option>
+                                        {% for subject in subjects %}
+                                            <option value="{{ subject.id }}" {% if subject.id == app.request.get('subjectId')|default %}selected{% endif %}>{{ subject.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-6 form-group float-left pt-3">
+                                    <select class="form-control" name="cityId" id="city">
+                                        <option value="">Всички градове</option>
+                                        {% for city in cities %}
+                                            <option value="{{ city.id }}" {% if city.id == app.request.get('cityId')|default %}selected{% endif %}>{{ city.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Цена от</span>
+                                    </div>
+                                    <input type="number" name="minPrice" class="form-control" value="{{ app.request.get('minPrice')|default }}">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">лв</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Цена до</span>
+                                    </div>
+                                    <input type="number" name="maxPrice" class="form-control" value="{{ app.request.get('maxPrice')|default }}">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">лв</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <select class="form-control" name="gender" id="gender">
+                                    <option value="">Всички полове</option>
+                                    <option value="f" {% if 'f' == app.request.get('gender')|default %}selected{% endif %}>Жена</option>
+                                    <option value="m" {% if 'm' == app.request.get('gender')|default %}selected{% endif %}>Мъж</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-primary">Търси</button>
+                                <a href="{{ path('teacher_list', {lessonType: app.request.get('lessonType')}) }}" class="btn btn-secondary">Изчисти</a>
+                            </div>
+                        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/petar/projects/teacherfinder/src/Controller/TeacherController.php'|file_link(0) }}">src/Controller/TeacherController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/petar/projects/teacherfinder/templates/teacher/index.html.twig'|file_link(0) }}">templates/teacher/index.html.twig</a></code></li>
-    </ul>
-</div>
+                        <input type="hidden" name="lessonType" value="{{ app.request.get('lessonType')|default }}">
+                        <input type="hidden" name="orderBy" value="{{ orderBy }}">
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="show-article-container p-3 mt-4 float-left">
+                    <h1 class="text-center pb-3">Учители</h1>
+                    <div class="row">
+                        <div class="col-9">
+                            <h3>Общо: {{ pagerfanta.nbResults }}</h3>
+                        </div>
+                        <div class="col-3 form-group float-right">
+                            <select class="form-control js-reviews-sort" name="reviewsSort" id="reviews-sort">
+                                <option value="highest" {% if orderBy == 'highest' %}selected{% endif %}>Най - висок рейтинг</option>
+                                <option value="lowest" {% if orderBy == 'lowest' %}selected{% endif %}>Най - нисък рейтинг</option>
+                                <option value="cheapest" {% if orderBy == 'cheapest' %}selected{% endif %}>Най - ниска цена за час</option>
+                                <option value="mostExpensive" {% if orderBy == 'mostExpensive' %}selected{% endif %}>Най - висока цена за час</option>
+                            </select>
+                        </div>
+                    </div>
+                    {% for teacher in teachers %}
+                        <div class="article-container my-1">
+                            <a href="#">
+                                <img width="147" class="article-img" src="{{ asset('images/teacher-pics/' ~ teacher.logo) }}">
+                                <div class="article-title d-inline-block pl-3 align-middle">
+                                    <span>{{ teacher.name }}</span>
+                                    {{ starRatingDisplay.renderRating(teacher.rating) }} {% if teacher.rating > 1 %}({{ teacher.rating }} - базирано на {{ teacher.activeReviewsCount }} отзива){% endif %}
+                                    <br>
+                                    <span class="article-details"> Предмет: <b>{{ teacher.subject.name }}</b></span>
+                                    <br>
+                                    <span class="article-details"> Град: <b>{{ teacher.city.name }}</b></span>
+                                    <br>
+                                    <span class="article-details"> Начини на обучение:
+                                        {% if teacher.lessonTypes|length == 1 %}
+                                            {% if teacher.lessonTypes|first.type == 'online' %}
+                                                <b>Онлайн</b>
+                                            {% else %}
+                                                <b>Присъствено</b>
+                                            {% endif %}
+                                        {% else %}
+                                            {% set firstType = teacher.lessonTypes[0] %}
+                                            {% set secondType = teacher.lessonTypes[1] %}
+                                            {% if firstType.type == 'online' %}
+                                                <b>Онлайн, </b>
+                                                {% else %}
+                                                <b>Присъствено, </b>
+                                            {% endif %}
+
+                                            {% if secondType.type == 'online' %}
+                                                <b>Онлайн</b>
+                                                {% else %}
+                                                <b>Присъствено</b>
+                                            {% endif %}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                                <div class="float-right pr-3 pt-4">
+                                    <span style="color: #dc3545">{{ teacher.pricePerHour }} лв</span> / ч
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    {% if pagerfanta.haveToPaginate %}
+                        <div class="float-right pt-3">
+                            <ul class="pagination">
+                                {% for i in 1..pagerfanta.getNbPages %}
+                                    <li class="page-item {{ pagerfanta.currentPage == i ? 'disabled' : '' }}"><a class="page-link" href="{{ app.request.uri }}&page={{ i }}">{{ i }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" class="js-teachers-route" id="teachers-route" name="teachersRoute" value="{{ app.request.uri }}">
+
+{% endblock %}
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script>
+        $( document ).ready(function() {
+            $( ".js-reviews-sort" ).change(function() {
+                let url = document.getElementsByClassName('js-teachers-route')[0].value + '&orderBy=' + this.value;
+                window.location.replace(url);
+            });
+        });
+    </script>
 {% endblock %}

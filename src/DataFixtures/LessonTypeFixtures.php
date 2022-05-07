@@ -29,10 +29,22 @@ class LessonTypeFixtures extends Fixture implements DependentFixtureInterface
         $teachers = $this->teacherRepository->findAll();
 
         foreach ($teachers as $teacher) {
-            $lessonType = new LessonType();
-            $lessonType->setTeacher($teacher);
-            $lessonType->setType($lessonTypes[array_rand($lessonTypes)]);
-            $manager->persist($lessonType);
+            if ($teacher->getRating() >= 3) {
+                $lessonType = new LessonType();
+                $lessonType->setTeacher($teacher);
+                $lessonType->setType('online');
+                $manager->persist($lessonType);
+
+                $lessonType = new LessonType();
+                $lessonType->setTeacher($teacher);
+                $lessonType->setType('in-person');
+                $manager->persist($lessonType);
+            } else {
+                $lessonType = new LessonType();
+                $lessonType->setTeacher($teacher);
+                $lessonType->setType($lessonTypes[array_rand($lessonTypes)]);
+                $manager->persist($lessonType);
+            }
         }
 
         $manager->flush();

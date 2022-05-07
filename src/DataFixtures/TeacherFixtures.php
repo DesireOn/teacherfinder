@@ -31,6 +31,9 @@ class TeacherFixtures extends Fixture implements DependentFixtureInterface
         $this->cityRepository = $cityRepository;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function load(ObjectManager $manager): void
     {
         $teachers = [
@@ -160,7 +163,7 @@ class TeacherFixtures extends Fixture implements DependentFixtureInterface
             $teacherEntity->setStatus('approved');
             $teacherEntity->setDescription($description);
             $teacherEntity->setActiveReviewsCount(0);
-            $teacherEntity->setPricePerHour(mt_rand (300, 1000) / 10);
+            $teacherEntity->setPricePerHour(random_int(5, 25));
             $teacherEntity->setGender($teacher['gender']);
             $teacherEntity->setSubject($randomSubject);
             $teacherEntity->setCity($randomCity);

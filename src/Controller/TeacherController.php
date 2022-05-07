@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Filter\TeacherFilter;
+use App\Repository\CityRepository;
+use App\Repository\SubjectRepository;
 use App\Repository\TeacherRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -26,14 +29,21 @@ class TeacherController extends AbstractController
     }
 
     /**
-     * @Route("/teacher/list", name="app_teacher")
+     * @Route("/teacher/list", name="teacher_list")
      */
-    public function list(Request $request): Response
+    public function list(
+        Request $request,
+        TeacherFilter $teacherFilter,
+        SubjectRepository $subjectRepository,
+        CityRepository $cityRepository
+    ): Response
     {
         $requestOrderBy = $request->get('orderBy') ?: 'highest';
-        $orderBy = $this->sortTeachers($requestOrderBy);
+        $orderByCriteria = $this->sortTeachers($requestOrderBy);
 
-        $qb = $this->teacherRepository->findTeachersByStatusBuilder('approved', $orderBy);
+        $filter = $teacherFilter->fromArray($request->query->all());
+
+        $qb = $this->teacherRepository->findTeachersByFilterBuilder($orderByCriteria, $filter);
         $adapter = new QueryAdapter($qb);
         $pagerfanta = new Pagerfanta($adapter);
         $pagerfanta->setMaxPerPage(5);
@@ -48,14 +58,33 @@ class TeacherController extends AbstractController
             'teachers' => $teachers,
             'pagerfanta' => $pagerfanta,
             'orderBy' => $requestOrderBy,
+            'subjects' => $subjectRepository->findAll(),
+            'cities' => $cityRepository->findAll()
         ]);
     }
 
     public function sortTeachers(string $filter): array
     {
-        return [
-            'property' => 't.rating',
-            'criteria' => 'DESC'
-        ];
+        if ($filter === 'highest') {
+            return [
+                'property' => 't.rating',
+                'criteria' => 'DESC'
+            ];
+        } elseif ($filter === 'lowest') {
+            return [
+                'property' => 't.rating',
+                'criteria' => 'ASC'
+            ];
+        } elseif ($filter === 'cheapest') {
+            return [
+                'property' => 't.pricePerHour',
+                'criteria' => 'ASC'
+            ];
+        } else {
+            return [
+                'property' => 't.pricePerHour',
+                'criteria' => 'DESC'
+            ];
+        }
     }
 }
