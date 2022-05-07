@@ -357,3 +357,8 @@ h1.font-weight-semi-bold {
 .search-tabs a.active {
     color: #dc3545;
 }
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #dc3545 !important;
+    border-color: #dc3545;
+}

@@ -48,6 +48,8 @@ class TeacherFilter
         $lessonTypes = ['online', 'in-person'];
         if (isset($filters['lessonType']) && in_array($filters['lessonType'], $lessonTypes)) {
             $this->setLessonType($filters['lessonType']);
+        } else {
+            $this->setLessonType('online');
         }
 
         if (isset($filters['cityId']) && is_numeric($filters['cityId'])) {

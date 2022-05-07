@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Filter\TeacherFilter;
+use App\Repository\CityRepository;
+use App\Repository\SubjectRepository;
 use App\Repository\TeacherRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
@@ -29,7 +31,12 @@ class TeacherController extends AbstractController
     /**
      * @Route("/teacher/list", name="teacher_list")
      */
-    public function list(Request $request, TeacherFilter $teacherFilter): Response
+    public function list(
+        Request $request,
+        TeacherFilter $teacherFilter,
+        SubjectRepository $subjectRepository,
+        CityRepository $cityRepository
+    ): Response
     {
         $requestOrderBy = $request->get('orderBy') ?: 'highest';
         $orderByCriteria = $this->sortTeachers($requestOrderBy);
@@ -51,6 +58,8 @@ class TeacherController extends AbstractController
             'teachers' => $teachers,
             'pagerfanta' => $pagerfanta,
             'orderBy' => $requestOrderBy,
+            'subjects' => $subjectRepository->findAll(),
+            'cities' => $cityRepository->findAll()
         ]);
     }
 
