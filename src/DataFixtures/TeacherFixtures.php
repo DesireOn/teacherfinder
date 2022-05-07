@@ -163,7 +163,7 @@ class TeacherFixtures extends Fixture implements DependentFixtureInterface
             $teacherEntity->setStatus('approved');
             $teacherEntity->setDescription($description);
             $teacherEntity->setActiveReviewsCount(0);
-            $teacherEntity->setPricePerHour(random_int(30, 100));
+            $teacherEntity->setPricePerHour(random_int(5, 25));
             $teacherEntity->setGender($teacher['gender']);
             $teacherEntity->setSubject($randomSubject);
             $teacherEntity->setCity($randomCity);
