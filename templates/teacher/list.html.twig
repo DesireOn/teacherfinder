@@ -66,8 +66,40 @@
                             {% endif %}
                         </div>
                         <div class="row">
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Цена от</span>
+                                    </div>
+                                    <input type="number" name="minPrice" class="form-control" value="{{ app.request.get('minPrice')|default }}">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">лв</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Цена до</span>
+                                    </div>
+                                    <input type="number" name="maxPrice" class="form-control" value="{{ app.request.get('maxPrice')|default }}">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">лв</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 form-group">
+                                <select class="form-control" name="gender" id="gender">
+                                    <option value="">Всички полове</option>
+                                    <option value="f" {% if 'f' == app.request.get('gender')|default %}selected{% endif %}>Жена</option>
+                                    <option value="m" {% if 'm' == app.request.get('gender')|default %}selected{% endif %}>Мъж</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-sm-3">
                                 <button type="submit" class="btn btn-primary">Търси</button>
+                                <a href="{{ path('teacher_list', {lessonType: app.request.get('lessonType')}) }}" class="btn btn-secondary">Изчисти</a>
                             </div>
                         </div>
 
