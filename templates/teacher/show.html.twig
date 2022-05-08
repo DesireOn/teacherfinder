@@ -1,0 +1,119 @@
+{% extends 'base.html.twig' %}
+{% import "macro/star-rating-display.html.twig" as starRatingDisplay %}
+
+{% block title %}Учител {{ teacher.name }}{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="show-article-container p-3 mt-4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <img class="show-article-img pl-3" src="{{ asset('images/teacher-pics/' ~ teacher.logo) }}">
+                            <div class="show-article-title-container d-inline-block pl-3 align-middle">
+                                <span class="show-article-title ">{{ teacher.name }}</span>
+                                <br>
+                                {{ starRatingDisplay.renderRating(teacher.rating) }} {% if teacher.rating|default and teacher.rating > 0 %}({{ teacher.rating }}){% endif %}
+                            </div>
+{#                            <div style="float: right"><a href="{{ path('add-review', {'id':school.id}) }}" class="btn btn-danger my-2 my-sm-0">Напиши ревю</a></div>#}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="article-text pl-3">
+                                        <b>Имейл:</b> {{ teacher.email }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="article-text pl-3">
+                                        <b>Телефон:</b> {{ teacher.phone }}
+                                    </div>
+                                </div>
+                            </div>
+{#                            <div class="row">#}
+{#                                <div class="col-sm-12">#}
+{#                                    <div class="article-text pl-3">#}
+{#                                        <b>Адрес:</b> {{ teacher.address }}#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="article-text pl-3">
+                                        {% if teacher.description|default %}<b>Описание:</b> {{ teacher.description }} <br>{% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if teacher.rating|default and teacher.rating > 0 %}
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row">
+                                    <div class="col-9">
+                                        <h3><i class="pr-3 fa fa-comment pl-3"></i>{{ teacher.activeReviewsCount }} ревюта</h3>
+                                    </div>
+                                    <div class="col-3 form-group float-right">
+                                        <select class="form-control js-reviews-sort" name="reviewsSort" id="reviews-sort">
+                                            <option value="newest" {% if orderBy == 'newest' %}selected{% endif %}>Най - нови</option>
+                                            <option value="oldest" {% if orderBy == 'oldest' %}selected{% endif %}>Най - стари</option>
+                                            <option value="highest" {% if orderBy == 'highest' %}selected{% endif %}>Най - висок рейтинг</option>
+                                            <option value="lowest" {% if orderBy == 'lowest' %}selected{% endif %}>Най - нисък рейтинг</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                {% for review in reviews %}
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="comment-container d-inline-block pl-3 align-top">
+                                                <span class="comment">{% if review.hideAuthorName %}Анонимен{% else %}{{ review.authorName }}{% endif %}</span>
+                                                <br>
+                                                <span class="comment">{{ starRatingDisplay.renderRating(review.rating) }}</span>
+                                                <span class="align-left article-details"><span class="comment">  {{ review.date|date('Y-m-d') }}</span></span>
+                                                <br>
+                                                <span class="commenter-name">{{ review.title }}</span>
+                                                <br>
+                                                <span class="comment">{{ review.content }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                {% endfor %}
+                                {% if pagerfanta.haveToPaginate %}
+                                    <div class="float-right pt-3">
+                                        <ul class="pagination">
+                                            {% for i in 1..pagerfanta.getNbPages %}
+                                                <li class="page-item {{ pagerfanta.currentPage == i ? 'disabled' : '' }}"><a class="page-link" href="{{ path('teacher_show', {teacher: teacher.id}) }}?page={{ i }}&orderBy={{ orderBy }}">{{ i }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <input type="hidden" class="js-teacher-route" id="teacher-route" name="teacherRoute" value="{{ path('teacher_show', {teacher: teacher.id}) }}">
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script>
+        $( document ).ready(function() {
+            $( ".js-reviews-sort" ).change(function() {
+                let url = document.getElementsByClassName('js-teacher-route')[0].value + '?orderBy=' + this.value;
+                window.location.replace(url);
+            });
+        });
+    </script>
+{% endblock %}

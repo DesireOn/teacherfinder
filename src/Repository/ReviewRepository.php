@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Review;
+use App\Entity\Teacher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,5 +45,17 @@ class ReviewRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    public function findReviewsBuilder(Teacher $teacher, array $orderBy, string $reviewStatus = 'approved'): QueryBuilder
+    {
+        return
+            $this->createQueryBuilder('r')
+                ->andWhere('r.teacher = :teacher')
+                ->setParameter('teacher', $teacher)
+                ->andWhere('r.status = :reviewStatus')
+                ->setParameter('reviewStatus', $reviewStatus)
+                ->orderBy($orderBy['property'], $orderBy['criteria'])
+            ;
     }
 }
