@@ -17,7 +17,7 @@
                                 <br>
                                 {{ starRatingDisplay.renderRating(teacher.rating) }} {% if teacher.rating|default and teacher.rating > 0 %}({{ teacher.rating }}){% endif %}
                             </div>
-{#                            <div style="float: right"><a href="{{ path('add-review', {'id':school.id}) }}" class="btn btn-danger my-2 my-sm-0">Напиши ревю</a></div>#}
+                            <div style="float: right"><span style="color: #dc3545; font-size: x-large">{{ teacher.pricePerHour }} лв</span> / ч</div>
                         </div>
                     </div>
 
@@ -26,7 +26,41 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="article-text pl-3">
-                                        <b>Имейл:</b> {{ teacher.email }}
+                                        <b>Предмет:</b> {{ teacher.subject.name }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="article-text pl-3">
+                                        <b>Начини на обучение:</b> {% if teacher.lessonTypes|length == 1 %}
+                                            {% if teacher.lessonTypes|first.type == 'online' %}
+                                                Онлайн
+                                            {% else %}
+                                                Присъствено
+                                            {% endif %}
+                                        {% else %}
+                                            {% set firstType = teacher.lessonTypes[0] %}
+                                            {% set secondType = teacher.lessonTypes[1] %}
+                                            {% if firstType.type == 'online' %}
+                                                Онлайн,
+                                            {% else %}
+                                                Присъствено,
+                                            {% endif %}
+
+                                            {% if secondType.type == 'online' %}
+                                                Онлайн
+                                            {% else %}
+                                                Присъствено
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="article-text pl-3">
+                                        <b>Град:</b> {{ teacher.city.name }}
                                     </div>
                                 </div>
                             </div>
