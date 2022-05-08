@@ -63,7 +63,7 @@ class TeacherController extends AbstractController
         ]);
     }
 
-    public function sortTeachers(string $filter): array
+    private function sortTeachers(string $filter): array
     {
         if ($filter === 'highest') {
             return [
