@@ -36,11 +36,14 @@ class TeacherController extends AbstractController
     /**
      * @Route("/", name="teacher_home")
      */
-    public function home(ReviewRepository $reviewRepository, TeacherRepository $teacherRepository): Response
+    public function home(
+        SubjectRepository $subjectRepository,
+        CityRepository $cityRepository
+    ): Response
     {
         return $this->render('teacher/home.html.twig', [
-            'reviews' => $reviewRepository->findBy(['status' => 'approved'], ['date' => 'DESC'], 5),
-            'teachers' => $teacherRepository->findBy(['status' => 'approved'], ['rating' => 'DESC'], 5)
+            'subjects' => $subjectRepository->findAll(),
+            'cities' => $cityRepository->findAll()
         ]);
     }
 
