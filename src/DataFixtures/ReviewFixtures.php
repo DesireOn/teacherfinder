@@ -3,7 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Review;
-use App\Entity\Teacher;
+use App\Repository\ReviewRepository;
 use App\Repository\TeacherRepository;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -17,13 +17,19 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
      * @var TeacherRepository
      */
     private $teacherRepository;
+    /**
+     * @var ReviewRepository
+     */
+    private $reviewRepository;
 
     /**
      * @param TeacherRepository $teacherRepository
+     * @param ReviewRepository $reviewRepository
      */
-    public function __construct(TeacherRepository $teacherRepository)
+    public function __construct(TeacherRepository $teacherRepository, ReviewRepository $reviewRepository)
     {
         $this->teacherRepository = $teacherRepository;
+        $this->reviewRepository = $reviewRepository;
     }
 
     /**
@@ -117,7 +123,7 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
 
             $teacherRating = $ratingSum / 5;
             $teacher->setRating($teacherRating);
-            $teacher->setActiveReviewsCount($numberOfReviews);
+            $teacher->setActiveReviewsCount(count($usedReviews));
 
             $manager->persist($teacher);
         }
