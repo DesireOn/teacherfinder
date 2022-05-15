@@ -59,9 +59,26 @@
                         </div>
                     </div>
                     <div class="row d-flex justify-content-center">
-                        <div class="col-5">
+                        <div class="col-4">
                             <a href="{{ path('teacher_list', {lessonType: 'online'}) }}" class="btn btn-secondary">Потърси учител</a>
-                            <a href="#" class="btn btn-primary">Регистрирай се като учител</a>
+                            <a href="#" class="btn btn-primary">Регистрирай се</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="show-article-container p-3 mt-4 float-left">
+                    <h2 class="text-center pb-3">Намери учители в твоя град</h2>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-6">
+                            {% for city in cities %}
+                                <a href="{{ path('teacher_list', {lessonType: 'online', cityId: city.id}) }}" class="btn btn-success">{{ city.name }}</a>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

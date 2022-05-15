@@ -10,7 +10,7 @@ class CityFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $cityNames = ['София', 'Русе', 'Пловдив', 'Варна', 'Плевен'];
+        $cityNames = ['София', 'Русе', 'Пловдив', 'Варна', 'Бургас', 'Плевен'];
 
         foreach ($cityNames as $cityName) {
             $city = new City();
