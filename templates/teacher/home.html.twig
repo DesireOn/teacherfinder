@@ -85,6 +85,23 @@
             </div>
         </div>
     </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="show-article-container p-3 mt-4 float-left">
+                    <h2 class="text-center pb-3">Най-търсени предмети</h2>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-6">
+                            {% for subject in subjects|slice(0,4) %}
+                                <a href="{{ path('teacher_list', {lessonType: 'online', subjectId: subject.id}) }}" class="btn btn-success">{{ subject.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascripts %}
