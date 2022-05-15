@@ -77,7 +77,7 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-6">
                             {% for city in cities %}
-                                <a href="{{ path('teacher_list', {lessonType: 'online', cityId: city.id}) }}" class="btn btn-success">{{ city.name }}</a>
+                                <a href="{{ path('teacher_list', {lessonType: 'in-person', cityId: city.id}) }}" class="btn btn-success">{{ city.name }}</a>
                             {% endfor %}
                         </div>
                     </div>
