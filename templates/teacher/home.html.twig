@@ -9,15 +9,15 @@
                     <h1 class="text-center pb-3">Намери подходящия учител</h1>
                     <div class="row search-tabs">
                         <div class="col-sm-6 text-center pb-3">
-                            <a class="active" href="">Онлайн</a>
+                            <a class="active js--lesson-type" href="" data-value="online">Онлайн</a>
                         </div>
                         <div class="col-sm-6 text-center pb-3">
-                            <a class="" href="">Присъствено</a>
+                            <a class="js--lesson-type" href="" data-value="in-person">Присъствено</a>
                         </div>
                     </div>
                     <form action="{{ path('teacher_list') }}" method="get">
                         <div class="row">
-                            <div class="col-12 form-group pt-3">
+                            <div class="col-12 form-group pt-3 js--subject">
                                 <select class="form-control" name="subjectId" id="subject">
                                     <option value="">Всички предмети</option>
                                     {% for subject in subjects %}
@@ -25,7 +25,7 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="col-6 form-group float-left pt-3 d-none">
+                            <div class="col-6 form-group float-left pt-3 d-none js--city">
                                 <select class="form-control" name="cityId" id="city">
                                     <option value="">Всички градове</option>
                                     {% for city in cities %}
@@ -40,11 +40,47 @@
                             </div>
                         </div>
 
-                        <input type="hidden" name="lessonType" value="online">
+                        <input type="hidden" class="js--lesson-type-hidden" name="lessonType" value="online">
                         <input type="hidden" name="orderBy" value="highest">
                     </form>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        window.onload = function() {
+            let lessonTypes = document.querySelectorAll('a.js--lesson-type');
+            let lessonTypeHidden = document.querySelector('input.js--lesson-type-hidden');
+            let subject = document.querySelector('.js--subject');
+            let city = document.querySelector('.js--city');
+
+            for(let i = 0; i < lessonTypes.length; i++) {
+                let type = lessonTypes[i];
+                type.onclick = function(e) {
+                    e.preventDefault();
+                    // Remove active class of all lessonTypes
+                    Array.from(lessonTypes).forEach((el) => el.classList.remove('active'));
+                    // Add active class only to the clicked lesson type
+                    type.classList.add('active');
+                    // Change lessonType with lesson type value
+                    lessonTypeHidden.value = type.dataset.value;
+                    if (type.dataset.value === 'online') {
+                        // if lesson type is online make subject 12sm and hide city
+                        subject.classList.remove('col-6');
+                        subject.classList.add('col-12');
+                        city.classList.add('d-none');
+                    }
+                    if (type.dataset.value === 'in-person') {
+                        // if lesson type is in-person make subject 6sm and show city
+                        subject.classList.remove('col-12');
+                        subject.classList.add('col-6');
+                        city.classList.remove('d-none');
+                    }
+                }
+            }
+        }
+    </script>
 {% endblock %}
