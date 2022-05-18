@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Teacher;
 use App\Filter\TeacherFilter;
+use App\Form\TeacherSubmitType;
 use App\Repository\CityRepository;
 use App\Repository\ReviewRepository;
 use App\Repository\SubjectRepository;
 use App\Repository\TeacherRepository;
 use App\Sorting\ReviewSorting;
 use App\Sorting\TeacherSorting;
+use App\Uploader\FileUploader;
+use Doctrine\ORM\EntityManagerInterface;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -117,6 +120,40 @@ class TeacherController extends AbstractController
             'pagerfanta' => $pagerfanta,
             'reviews' => $reviews,
             'orderBy' => $request->get('orderBy') ?: 'newest',
+        ]);
+    }
+
+    /**
+     * @Route("/teacher-submit", name="teacher_submit")
+     */
+    public function submit(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        FileUploader $fileUploader
+    ): Response
+    {
+        $form = $this->createForm(TeacherSubmitType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $teacher = $form->getData();
+
+            if ($teacher instanceof Teacher) {
+                $logoFile = $form->get('logo')->getData();
+                if ($logoFile) {
+                    $teacherLogoName = $fileUploader->upload($logoFile);
+                    $teacher->setLogo($teacherLogoName);
+                }
+
+                $entityManager->persist($teacher);
+                $entityManager->flush();
+            }
+
+            return $this->render('teacher/submit-thank-you.html.twig', []);
+        }
+
+        return $this->render('teacher/submit.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 }

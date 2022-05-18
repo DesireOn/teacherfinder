@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block body %}
+
+
+    <div class="container">
+        <h1>Регистрация</h1>
+        {{ form(form) }}
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script>
+        $('.custom-file-input').on('change', function(event) {
+            let inputFile = event.currentTarget;
+
+            if (inputFile.files && inputFile.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('img').remove();
+
+                    let img = $('<img>');
+                    img.attr('id', 'preview')
+                    img.attr('src', e.target.result);
+                    img.attr('width', 200);
+                    $('div .custom-file').after(img);
+                    // img.appendTo('.custom-file');
+                }
+                reader.readAsDataURL(inputFile.files[0]); // convert to base64 string
+
+            }
+        });
+    </script>
+{% endblock %}
