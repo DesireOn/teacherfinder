@@ -121,7 +121,7 @@ class ReviewFixtures extends Fixture implements DependentFixtureInterface
                 }
             }
 
-            $teacherRating = $ratingSum / 5;
+            $teacherRating = $ratingSum / count($usedReviews);
             $teacher->setRating($teacherRating);
             $teacher->setActiveReviewsCount(count($usedReviews));
 
