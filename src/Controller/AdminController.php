@@ -60,4 +60,18 @@ class AdminController extends AbstractController
             'type' => 'всички'
         ]);
     }
+
+    /**
+     * @Route("/admin/teacher/list-pending", name="admin_teacher_list_pending")
+     * @return Response
+     */
+    public function listSchoolsPending(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_MODERATOR');
+
+        return $this->render('admin/teacher_list.html.twig', [
+            'schools' => $this->teacherRepository->findBy(['status' => 'pending'], ['createdAt' => 'DESC']),
+            'type' => 'неодобрени'
+        ]);
+    }
 }
