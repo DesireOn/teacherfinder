@@ -36,7 +36,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin", name="admin")
+     * @Route("/admin-home", name="admin")
      * @return Response
      * @throws NoResultException
      * @throws NonUniqueResultException
