@@ -1,0 +1,54 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Списък с учители{% endblock %}
+
+{% block body %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <br>
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Списък с {{ type }} учители</h1>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Учитеи</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Снимка</th>
+                                <th>Име на учител</th>
+                                <th>Оценка</th>
+                                <th>Имейл</th>
+                                <th>Статус</th>
+                                <th>Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for school in schools %}
+                            <tr {% if school.status == 'pending' %} class="bg-danger" {% endif %}>
+                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}><img width="80" src="{{ asset('images/teacher-pics/') ~ school.logo }}" alt=""></td>
+                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}>{{ school.name }}</td>
+                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}>{% if school.rating == 0 %}Not Rated{% else %}{{ school.rating }}{% endif%}</td>
+                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}>{{ school.email }}</td>
+                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}>{{ school.status }}</td>
+                                {% if school.status == 'pending' %}
+                                    <td class="text-white"><a class="text-white" href=#">Разгледай и одобри</a> </td>
+                                {% else %}
+                                    <td><a href="#">Редактирай</a> </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+{% endblock %}

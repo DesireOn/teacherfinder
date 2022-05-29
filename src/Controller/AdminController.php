@@ -39,11 +39,25 @@ class AdminController extends AbstractController
      */
     public function index(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_MODERATOR');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
         return $this->render('admin/index.html.twig', [
             'teachersCount' => $this->teacherRepository->getCountOfAll(),
             'teachersPendingCount' => $this->teacherRepository->getCountByStatus('pending'),
+        ]);
+    }
+
+    /**
+     * @Route("/admin/teacher/list", name="admin_teacher_list")
+     * @return Response
+     */
+    public function teacherList(): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        return $this->render('admin/teacher_list.html.twig', [
+            'schools' => $this->teacherRepository->findBy([], ['createdAt' => 'DESC']),
+            'type' => 'всички'
         ]);
     }
 }
