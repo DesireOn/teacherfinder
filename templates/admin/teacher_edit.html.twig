@@ -1,0 +1,28 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Редактирай учител{% endblock %}
+
+{% block body %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <br>
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Редактирай учител</h1>
+
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Редактирай</h6>
+            </div>
+            <div class="card-body">
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
