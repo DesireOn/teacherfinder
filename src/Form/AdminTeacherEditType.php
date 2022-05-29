@@ -71,7 +71,7 @@ class AdminTeacherEditType extends AbstractType
             ->add('name', TextType::class, ['label' => 'Име'])
             ->add('status', ChoiceType::class, [
                 'choices' => [
-                    'Active' => 'active',
+                    'Approved' => 'approved',
                     'Inactive' => 'inactive',
                     'Pending' => 'pending',
                 ],
