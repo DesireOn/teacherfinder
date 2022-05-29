@@ -61,8 +61,8 @@
                         <span>Всички учители</span></a>
                 </li>
 
-                <li class="nav-item {% if app.request.get('_route') == 'admin_schools_list_pending' %}active{% endif %}">
-                    <a class="nav-link" href="#">
+                <li class="nav-item {% if app.request.get('_route') == 'admin_teacher_list_pending' %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('admin_teacher_list_pending') }}">
                         <i class="fas fa-fw fa-list"></i>
                         <span>Неодобрени учители</span></a>
                 </li>
