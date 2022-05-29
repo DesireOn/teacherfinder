@@ -85,7 +85,6 @@ class TeacherSubmitType extends AbstractType
                 'choices' => [
                     'Мъж' => 'm',
                     'Жена' => 'f',
-                    'Не казвам' => null
                 ]
             ])
             ->add('lessonTypes', ChoiceType::class, [
