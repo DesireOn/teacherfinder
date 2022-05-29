@@ -55,8 +55,8 @@
                     Учители
                 </div>
 
-                <li class="nav-item {% if app.request.get('_route') == 'admin_schools_list' %}active{% endif %}">
-                    <a class="nav-link" href="#">
+                <li class="nav-item {% if app.request.get('_route') == 'admin_teacher_list' %}active{% endif %}">
+                    <a class="nav-link" href="{{ path('admin_teacher_list') }}">
                         <i class="fas fa-fw fa-list"></i>
                         <span>Всички учители</span></a>
                 </li>
