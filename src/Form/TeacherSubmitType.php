@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\LessonType;
 use App\Entity\Teacher;
+use App\Form\DataTransformer\CityToNumberTransformer;
+use App\Form\DataTransformer\SubjectToNumberTransformer;
 use App\Repository\CityRepository;
 use App\Repository\SubjectRepository;
 use DateTimeImmutable;
@@ -34,15 +36,23 @@ class TeacherSubmitType extends AbstractType
 
     private $cityRepository;
 
+    private $subjectToNumberTransformer;
+
+    private $cityToNumberTransformer;
+
     /**
      * @param SubjectRepository $subjectRepository
      * @param CityRepository $cityRepository
      * @param EntityManagerInterface $entityManager
+     * @param SubjectToNumberTransformer $subjectToNumberTransformer
+     * @param CityToNumberTransformer $cityToNumberTransformer
      */
     public function __construct(
         SubjectRepository $subjectRepository,
         CityRepository $cityRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        SubjectToNumberTransformer $subjectToNumberTransformer,
+        CityToNumberTransformer $cityToNumberTransformer
     )
     {
         $subjects = $subjectRepository->findAll();
@@ -57,6 +67,8 @@ class TeacherSubmitType extends AbstractType
         $this->entityManager = $entityManager;
         $this->subjectRepository = $subjectRepository;
         $this->cityRepository = $cityRepository;
+        $this->subjectToNumberTransformer = $subjectToNumberTransformer;
+        $this->cityToNumberTransformer = $cityToNumberTransformer;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -98,13 +110,11 @@ class TeacherSubmitType extends AbstractType
             ])
             ->add('subject', ChoiceType::class, [
                 'label' => 'Предмет',
-                'choices' => $this->subjects,
-                'mapped' => false
+                'choices' => $this->subjects
             ])
             ->add('city', ChoiceType::class, [
                 'label' => 'Град',
-                'choices' => $this->cities,
-                'mapped' => false
+                'choices' => $this->cities
             ])
             ->addEventListener(
                 FormEvents::SUBMIT,
@@ -112,6 +122,11 @@ class TeacherSubmitType extends AbstractType
             )
             ->add('save', SubmitType::class, ['label' => 'Регистрирай се'])
         ;
+
+        $builder->get('subject')
+            ->addModelTransformer($this->subjectToNumberTransformer);
+        $builder->get('city')
+            ->addModelTransformer($this->cityToNumberTransformer);
     }
 
     public function submit(FormEvent $event)
@@ -139,25 +154,6 @@ class TeacherSubmitType extends AbstractType
                     }
                 }
             }
-
-            $subject = $form->get('subject')->getData();
-            if (is_numeric($subject)) {
-                $subjectEntity = $this->subjectRepository->findOneBy(['id' => $subject]);
-                if (!is_null($subjectEntity)) {
-                    $teacher->setSubject($subjectEntity);
-                    $this->entityManager->persist($teacher);
-                }
-            }
-
-            $city = $form->get('city')->getData();
-            if (is_numeric($city)) {
-                $cityEntity = $this->cityRepository->findOneBy(['id' => $city]);
-                if (!is_null($cityEntity)) {
-                    $teacher->setCity($cityEntity);
-                    $this->entityManager->persist($teacher);
-                }
-            }
-
             $this->entityManager->flush();
         }
     }
