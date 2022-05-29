@@ -42,9 +42,7 @@ class AdminController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_MODERATOR');
 
         return $this->render('admin/index.html.twig', [
-            'reviewsCount' => $this->reviewRepository->getCountOfAll(),
             'teachersCount' => $this->teacherRepository->getCountOfAll(),
-            'reviewsPendingCount' => $this->reviewRepository->getCountByStatus('pending'),
             'teachersPendingCount' => $this->teacherRepository->getCountByStatus('pending'),
         ]);
     }

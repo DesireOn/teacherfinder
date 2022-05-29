@@ -48,38 +48,17 @@
                         <span>Излез (Sign Out)</span></a>
                 </li>
                 <!-- Divider -->
-                <hr class="sidebar-divider">
-
-
-                <!-- Reviews Heading -->
-                <div class="sidebar-heading">
-                    Ревюта
-                </div>
-
-                <!-- Nav Item - List -->
-                <li class="nav-item {% if app.request.get('_route') == 'admin_reviews_list' %}active{% endif %}">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-fw fa-list"></i>
-                        <span>Всички отзиви</span></a>
-                </li>
-                <li class="nav-item {% if app.request.get('_route') == 'admin_reviews_list_pending' %}active{% endif %}">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-fw fa-list"></i>
-                        <span>Неодобрени отзиви</span></a>
-                </li>
-
-                <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
                 <!-- Schools Heading -->
                 <div class="sidebar-heading">
-                    Школи
+                    Учители
                 </div>
 
                 <li class="nav-item {% if app.request.get('_route') == 'admin_schools_list' %}active{% endif %}">
                     <a class="nav-link" href="#">
                         <i class="fas fa-fw fa-list"></i>
-                        <span>Всички u`iteli</span></a>
+                        <span>Всички учители</span></a>
                 </li>
 
                 <li class="nav-item {% if app.request.get('_route') == 'admin_schools_list_pending' %}active{% endif %}">
@@ -90,23 +69,6 @@
 
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
-
-                {% if is_granted('ROLE_ADMIN') %}
-                    <div class="sidebar-heading">
-                        Потребители
-                    </div>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-fw fa-list"></i>
-                            <span>Списък потребители</span></a>
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-fw fa-folder"></i>
-                            <span>Добави потребител</span></a>
-                    </li>
-
-                    <!-- Divider -->
-                    <hr class="sidebar-divider d-none d-md-block">
-                {% endif %}
 
                 <!-- Sidebar Toggler (Sidebar) -->
                 <div class="text-center d-none d-md-inline">
