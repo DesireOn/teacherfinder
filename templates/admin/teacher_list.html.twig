@@ -29,17 +29,17 @@
                             </tr>
                         </thead>
                         <tbody>
-                        {% for school in schools %}
-                            <tr {% if school.status == 'pending' %} class="bg-danger" {% endif %}>
-                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}><img width="80" src="{{ asset('images/teacher-pics/') ~ school.logo }}" alt=""></td>
-                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}>{{ school.name }}</td>
-                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}>{% if school.rating == 0 %}Not Rated{% else %}{{ school.rating }}{% endif%}</td>
-                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}>{{ school.email }}</td>
-                                <td {% if school.status == 'pending' %}class="text-white"{% endif %}>{{ school.status }}</td>
-                                {% if school.status == 'pending' %}
-                                    <td class="text-white"><a class="text-white" href=#">Разгледай и одобри</a> </td>
+                        {% for teacher in teachers %}
+                            <tr {% if teacher.status == 'pending' %} class="bg-danger" {% endif %}>
+                                <td {% if teacher.status == 'pending' %}class="text-white"{% endif %}><img width="80" src="{{ asset('images/teacher-pics/') ~ teacher.logo }}" alt=""></td>
+                                <td {% if teacher.status == 'pending' %}class="text-white"{% endif %}>{{ teacher.name }}</td>
+                                <td {% if teacher.status == 'pending' %}class="text-white"{% endif %}>{% if teacher.rating == 0 %}Not Rated{% else %}{{ teacher.rating }}{% endif%}</td>
+                                <td {% if teacher.status == 'pending' %}class="text-white"{% endif %}>{{ teacher.email }}</td>
+                                <td {% if teacher.status == 'pending' %}class="text-white"{% endif %}>{{ teacher.status }}</td>
+                                {% if teacher.status == 'pending' %}
+                                    <td class="text-white"><a class="text-white" href="{{ path('admin_teacher_edit', {id: teacher.id}) }}">Разгледай и одобри</a> </td>
                                 {% else %}
-                                    <td><a href="#">Редактирай</a> </td>
+                                    <td><a href="{{ path('admin_teacher_edit', {id: teacher.id}) }}">Редактирай</a> </td>
                                 {% endif %}
                             </tr>
                         {% endfor %}
