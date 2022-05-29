@@ -2,29 +2,23 @@
 
 namespace App\Form;
 
-use App\Entity\LessonType;
 use App\Entity\Teacher;
 use App\Form\DataTransformer\CityToNumberTransformer;
 use App\Form\DataTransformer\SubjectToNumberTransformer;
 use App\Repository\CityRepository;
 use App\Repository\SubjectRepository;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
 
-class TeacherSubmitType extends AbstractType
+class AdminTeacherEditType extends AbstractType
 {
     private $subjects;
 
@@ -75,22 +69,18 @@ class TeacherSubmitType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, ['label' => 'Име'])
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'Active' => 'active',
+                    'Inactive' => 'inactive',
+                    'Pending' => 'pending',
+                ],
+                'label' => 'Статус'
+            ])
+            ->add('rating', NumberType::class, ['label' => 'Оценка', 'disabled' => true])
             ->add('email', EmailType::class, ['label' => 'Имейл'])
             ->add('phone', NumberType::class, ['label' => 'Телефонен номер'])
             ->add('description', TextareaType::class, ['label' => 'Описание', 'required' => false])
-            ->add('logo', FileType::class, [
-                'label' => 'Профилна снимка',
-                'required' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2048k',
-                        'mimeTypes' => [
-                            'image/jpeg'
-                        ],
-                        'mimeTypesMessage' => 'Моля качете валидно изображение.'
-                    ])
-                ]
-            ])
             ->add('pricePerHour', NumberType::class, ['label' => 'Цена за час'])
             ->add('gender', ChoiceType::class, [
                 'label' => 'Пол',
@@ -99,63 +89,21 @@ class TeacherSubmitType extends AbstractType
                     'Жена' => 'f',
                 ]
             ])
-            ->add('lessonTypes', ChoiceType::class, [
-                'label' => 'Начини на обучение',
-                'choices' => [
-                    'Онлайн' => 'online',
-                    'Присъствено' => 'in-person'
-                ],
-                'multiple' => true,
-                'mapped' => false
-            ])
             ->add('subject', ChoiceType::class, [
                 'label' => 'Предмет',
                 'choices' => $this->subjects
             ])
             ->add('city', ChoiceType::class, [
                 'label' => 'Град',
-                'choices' => $this->cities
+                'choices' => $this->cities,
             ])
-            ->addEventListener(
-                FormEvents::SUBMIT,
-                [$this, 'submit']
-            )
-            ->add('save', SubmitType::class, ['label' => 'Регистрирай се'])
+            ->add('save', SubmitType::class, ['label' => 'Редактирай'])
         ;
 
         $builder->get('subject')
             ->addModelTransformer($this->subjectToNumberTransformer);
         $builder->get('city')
             ->addModelTransformer($this->cityToNumberTransformer);
-    }
-
-    public function submit(FormEvent $event)
-    {
-        $teacher = $event->getData();
-        $form = $event->getForm();
-
-        if ($teacher instanceof Teacher) {
-            $teacher->setCreatedAt(new DateTimeImmutable('now'));
-            $teacher->setStatus('pending');
-            $teacher->setRating(0);
-            $teacher->setActiveReviewsCount(0);
-
-            $lessonTypes = $form->get('lessonTypes')->getData();
-            if (!empty($lessonTypes)) {
-                foreach ($lessonTypes as $lessonType) {
-                    if ($lessonType === 'online' || $lessonType === 'in-person') {
-                        $lessonTypeEntity = new LessonType();
-                        $lessonTypeEntity->setType($lessonType);
-                        $lessonTypeEntity->setTeacher($teacher);
-                        $this->entityManager->persist($lessonTypeEntity);
-
-                        $teacher->addLessonType($lessonTypeEntity);
-                        $this->entityManager->persist($teacher);
-                    }
-                }
-            }
-            $this->entityManager->flush();
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver)

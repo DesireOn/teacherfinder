@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Review;
 use App\Entity\Teacher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -56,6 +58,37 @@ class ReviewRepository extends ServiceEntityRepository
                 ->andWhere('r.status = :reviewStatus')
                 ->setParameter('reviewStatus', $reviewStatus)
                 ->orderBy($orderBy['property'], $orderBy['criteria'])
+            ;
+    }
+
+    /**
+     * @return int|mixed|string
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function getCountOfAll()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+    /**
+     * @param string $status
+     * @return int|mixed|string
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function getCountByStatus(string $status)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.status = :status')
+            ->setParameter('status', $status)
+            ->select('count(r.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
             ;
     }
 }

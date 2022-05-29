@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Teacher;
 use App\Filter\TeacherFilter;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -95,5 +97,31 @@ class TeacherRepository extends ServiceEntityRepository
 
         return $queryBuilder;
 
+    }
+
+    /**
+     * @return int|mixed|string
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function getCountOfAll()
+    {
+        return $this->createQueryBuilder('s')
+            ->select('count(s.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
+
+
+    public function getCountByStatus(string $status)
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.status = :status')
+            ->setParameter('status', $status)
+            ->select('count(s.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
     }
 }

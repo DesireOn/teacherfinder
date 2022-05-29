@@ -149,11 +149,20 @@ class TeacherController extends AbstractController
                 $entityManager->flush();
             }
 
-            return $this->render('teacher/submit-thank-you.html.twig', []);
+            return $this->redirectToRoute('teacher_submit_thank_you');
         }
 
         return $this->render('teacher/submit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'hideForm' => $request->get('hideForm') ?? false
         ]);
+    }
+
+    /**
+     * @Route("/thank-you", name="teacher_submit_thank_you")
+     */
+    public function thankYou(): Response
+    {
+        return $this->render('teacher/submit-thank-you.html.twig');
     }
 }
