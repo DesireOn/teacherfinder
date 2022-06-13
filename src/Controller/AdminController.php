@@ -69,7 +69,7 @@ class AdminController extends AbstractController
      * @Route("/admin/teacher/list-pending", name="admin_teacher_list_pending")
      * @return Response
      */
-    public function listSchoolsPending(): Response
+    public function listTeachersPending(): Response
     {
         $this->denyAccessUnlessGranted('ROLE_MODERATOR');
 
