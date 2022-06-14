@@ -62,6 +62,8 @@ class AdminController extends AbstractController
         return $this->render('admin/index.html.twig', [
             'teachersCount' => $this->teacherRepository->getCountOfAll(),
             'teachersPendingCount' => $this->teacherRepository->getCountByStatus('pending'),
+            'reviewsCount' => $this->reviewRepository->getCountOfAll(),
+            'reviewsPendingCount' => $this->reviewRepository->getCountByStatus('pending')
         ]);
     }
 
