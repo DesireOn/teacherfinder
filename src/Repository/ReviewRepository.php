@@ -62,28 +62,36 @@ class ReviewRepository extends ServiceEntityRepository
     }
 
     /**
+     * @param int $teacherId
      * @return int|mixed|string
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function getCountOfAll()
+    public function getAvgRatingByTeacher(int $teacherId)
     {
         return $this->createQueryBuilder('r')
-            ->select('count(r.id)')
+            ->andWhere('r.status = :status')
+            ->setParameter('status', 'approved')
+            ->andWhere('r.teacher = :teacherId')
+            ->setParameter('teacherId', $teacherId)
+            ->select('AVG(r.rating)')
             ->getQuery()
             ->getSingleScalarResult()
             ;
     }
 
     /**
+     * @param Teacher $teacher
      * @param string $status
      * @return int|mixed|string
      * @throws NoResultException
      * @throws NonUniqueResultException
      */
-    public function getCountByStatus(string $status)
+    public function getCountByStatusForTeacher(Teacher $teacher, string $status)
     {
         return $this->createQueryBuilder('r')
+            ->andWhere('r.teacher = :teacher')
+            ->setParameter('teacher', $teacher)
             ->andWhere('r.status = :status')
             ->setParameter('status', $status)
             ->select('count(r.id)')

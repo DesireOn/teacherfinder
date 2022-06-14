@@ -1,0 +1,80 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Редактирай ревю{% endblock %}
+
+{% block body %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <br>
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Редактирай ревю</h1>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Редактирай</h6>
+            </div>
+            <div class="card-body">
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="review-id"><strong>ID на ревю:</strong></label>
+                        <input class="form-control" type="text" id="review-id" name="reviewId" value="{{ review.id }}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-date"><strong>Дата на ревю:</strong></label>
+                        <input class="form-control" type="text" id="review-date" name="reviewDate" value="{{ review.date|date('Y-m-d H:i:s') }}" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-status"><strong>Статус на ревю:</strong></label>
+                        <select class="form-control" name="reviewStatus" id="review-status">
+                            {% for status in review_statuses %}
+                                <option class="form-control" value="{{ status }}" {% if status == review.status %}selected{% endif %}>
+                                    {% if status == 'pending' %}
+                                        Ръчен преглед
+                                    {% elseif status == 'approved' %}
+                                        Активно
+                                    {% else %}
+                                        Неактивно
+                                    {% endif %}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-title"><strong>Заглавие на ревю:</strong></label>
+                        <input class="form-control" type="text" id="review-title" name="reviewTitle" value="{{ review.title }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-content"><strong>Съдържание на ревю:</strong></label>
+                        <input class="form-control" type="text" id="review-content" name="reviewContent" value="{{ review.content }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-rating"><strong>Рейтинг на ревю:</strong></label>
+                        <input class="form-control" type="text" id="review-rating" name="reviewRating" value="{{ review.rating }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review-author-name"><strong>Автор на ревю:</strong></label>
+                        <input class="form-control" type="text" id="review-author-name" name="reviewAuthorName" value="{{ review.authorName }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="teacher"><strong>Учител:</strong></label>
+                        <select class="form-control" name="teacher" id="teacher">
+                            {% for teacher in teachers %}
+                                <option class="form-control" value="{{ teacher.id }}" {% if teacher.id == review.teacher.id %}selected{% endif %}>{{ teacher.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Запиши</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

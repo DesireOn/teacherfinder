@@ -1,0 +1,54 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Списък с ревюта{% endblock %}
+
+{% block body %}
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <br>
+        <!-- Page Heading -->
+        <h1 class="h3 mb-2 text-gray-800">Списък с {{ type }} ревюта</h1>
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Ревюта</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Дата</th>
+                                <th>Заглавие</th>
+                                <th>Рейтинг</th>
+                                <th>Учител</th>
+                                <th>Статус</th>
+                                <th>Действие</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for review in reviews %}
+                            <tr {% if review.status == 'pending' %} class="bg-danger" {% endif %}>
+                                <td {% if review.status == 'pending' %}class="text-white"{% endif %}>{{ review.date|date('d-m-Y H:i:s') }}</td>
+                                <td {% if review.status == 'pending' %}class="text-white"{% endif %}>{{ review.title }}</td>
+                                <td {% if review.status == 'pending' %}class="text-white"{% endif %}>{{ review.rating }}</td>
+                                <td {% if review.status == 'pending' %}class="text-white"{% endif %}>{{ review.teacher.name }}</td>
+                                <td {% if review.status == 'pending' %}class="text-white"{% endif %}>{{ review.status }}</td>
+                                {% if review.status == 'pending' %}
+                                    <td class="text-white"><a class="text-white" href="{{ path('admin_review_edit', {id: review.id}) }}">Разгледай и одобри</a> </td>
+                                {% else %}
+                                    <td><a href="{{ path('admin_review_edit', {id: review.id}) }}">Редактирай</a> </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+{% endblock %}

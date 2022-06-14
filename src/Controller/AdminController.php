@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Review;
 use App\Entity\Teacher;
 use App\Form\AdminTeacherEditType;
 use App\Form\UserAddType;
@@ -38,8 +39,8 @@ class AdminController extends AbstractController
      * @param UserPasswordHasherInterface $userPasswordHasher
      */
     public function __construct(
-        ReviewRepository $reviewRepository,
-        TeacherRepository $teacherRepository,
+        ReviewRepository            $reviewRepository,
+        TeacherRepository           $teacherRepository,
         UserPasswordHasherInterface $userPasswordHasher
     )
     {
@@ -100,8 +101,8 @@ class AdminController extends AbstractController
      * @return Response
      */
     public function editTeacher(
-        Teacher $teacher,
-        Request $request,
+        Teacher                $teacher,
+        Request                $request,
         EntityManagerInterface $entityManager
     ): Response
     {
@@ -134,7 +135,7 @@ class AdminController extends AbstractController
      * @return Response
      */
     public function addUser(
-        Request $request,
+        Request                $request,
         EntityManagerInterface $entityManager
     ): Response
     {
@@ -170,6 +171,92 @@ class AdminController extends AbstractController
 
         return $this->render('admin/users_list.html.twig', [
             'users' => $userRepository->findBy([], [])
+        ]);
+    }
+
+    /**
+     * @Route("/admin/reviews/list", name="admin_reviews_list")
+     * @param ReviewRepository $reviewRepository
+     * @return Response
+     */
+    public function listReviews(ReviewRepository $reviewRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_MODERATOR');
+
+        return $this->render('admin/reviews_list.html.twig', [
+            'reviews' => $reviewRepository->findBy([], ['date' => 'DESC']),
+            'type' => 'всички'
+        ]);
+    }
+
+    /**
+     * @Route("/admin/reviews/list-pending", name="admin_reviews_list_pending")
+     * @param ReviewRepository $reviewRepository
+     * @return Response
+     */
+    public function listReviewsPending(ReviewRepository $reviewRepository): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_MODERATOR');
+
+        return $this->render('admin/reviews_list.html.twig', [
+            'reviews' => $reviewRepository->findBy(['status' => 'pending'], ['date' => 'DESC']),
+            'type' => 'неодобрени'
+        ]);
+    }
+
+    /**
+     * @Route("/admin/reviews/edit/{id}", name="admin_review_edit")
+     * @param Review $review
+     * @param TeacherRepository $teacherRepository
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param ReviewRepository $reviewRepository
+     * @return Response
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
+    public function editReview(
+        Review                 $review,
+        TeacherRepository      $teacherRepository,
+        Request                $request,
+        EntityManagerInterface $entityManager,
+        ReviewRepository       $reviewRepository
+    ): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_MODERATOR');
+
+        if ($request->getMethod() == 'POST') {
+            $review->setTitle($request->request->get('reviewTitle'));
+            $review->setContent($request->request->get('reviewContent'));
+            $review->setRating($request->request->get('reviewRating'));
+            $review->setAuthorName($request->request->get('reviewAuthorName'));
+            $review->setStatus($request->request->get('reviewStatus'));
+
+            $teacher = $teacherRepository->findOneBy(['id' => $request->request->get('teacher')]);
+            $review->setTeacher($teacher);
+
+            $entityManager->persist($review);
+
+            $entityManager->flush();
+
+            $newTeacherRating = $reviewRepository->getAvgRatingByTeacher((int)$review->getTeacher()->getId());
+            $review->getTeacher()->setRating(number_format((float)$newTeacherRating, 2, '.', ''));
+
+            $activeReviewsCount = $reviewRepository->getCountByStatusForTeacher($teacher, 'approved');
+            $review->getTeacher()->setActiveReviewsCount($activeReviewsCount);
+
+            $entityManager->persist($review);
+
+            $entityManager->flush();
+
+
+            return $this->redirectToRoute('admin_reviews_list');
+        }
+
+        return $this->render('admin/review_edit.html.twig', [
+            'review' => $review,
+            'teachers' => $teacherRepository->findAll(),
+            'review_statuses' => ['approved', 'inactive', 'pending']
         ]);
     }
 }
