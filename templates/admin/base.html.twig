@@ -70,6 +70,23 @@
                 <!-- Divider -->
                 <hr class="sidebar-divider d-none d-md-block">
 
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="sidebar-heading">
+                        Потребители
+                    </div>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('admin_users_list') }}">
+                            <i class="fas fa-fw fa-list"></i>
+                            <span>Списък потребители</span></a>
+                        <a class="nav-link" href="{{ path('admin_user_add') }}">
+                            <i class="fas fa-fw fa-folder"></i>
+                            <span>Добави потребител</span></a>
+                    </li>
+
+                    <!-- Divider -->
+                    <hr class="sidebar-divider d-none d-md-block">
+                {% endif %}
+
                 <!-- Sidebar Toggler (Sidebar) -->
                 <div class="text-center d-none d-md-inline">
                     <button class="rounded-circle border-0" id="sidebarToggle"></button>
