@@ -17,7 +17,13 @@
                                 <br>
                                 {{ starRatingDisplay.renderRating(teacher.rating) }} {% if teacher.rating|default and teacher.rating > 0 %}({{ teacher.rating }}){% endif %}
                             </div>
-                            <div style="float: right"><span style="color: #dc3545; font-size: x-large">{{ teacher.pricePerHour }} лв</span> / ч</div>
+
+                            <div style="float: right">
+                                <div>
+                                    <span style="color: #dc3545; font-size: x-large">{{ teacher.pricePerHour }} лв</span> / ч
+                                </div>
+                                <a href="{{ path('add-review', {'id':teacher.id}) }}" class="btn btn-danger my-2 my-sm-0">Напиши отзив</a>
+                            </div>
                         </div>
                     </div>
 
