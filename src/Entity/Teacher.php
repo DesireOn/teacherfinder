@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TeacherRepository::class)
@@ -22,6 +23,7 @@ class Teacher
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Моля, въведете име")
      */
     private $name;
 
@@ -36,16 +38,19 @@ class Teacher
     private $rating;
 
     /**
+     * @Assert\NotBlank(message="Моля, въведете имейл")
      * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
+     * @Assert\NotBlank(message="Моля, въведете телефонен номер")
      * @ORM\Column(type="string", length=255)
      */
     private $phone;
 
     /**
+     * @Assert\NotBlank(message="Моля, качете профилна снимка")
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $logo;
@@ -66,16 +71,19 @@ class Teacher
     private $activeReviewsCount;
 
     /**
+     * @Assert\NotBlank(message="Моля, въведете цена за час")
      * @ORM\Column(type="decimal", precision=10, scale=2)
      */
     private $pricePerHour;
 
     /**
+     * @Assert\NotBlank(message="Моля, изберете пол")
      * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $gender;
 
     /**
+     * @Assert\NotBlank(message="Моля, изберете поне един начин на обучение")
      * @ORM\OneToMany(targetEntity=LessonType::class, mappedBy="teacher")
      */
     private $lessonTypes;
@@ -86,11 +94,13 @@ class Teacher
     private $reviews;
 
     /**
+     * @Assert\NotBlank(message="Моля, изберете предмет")
      * @ORM\ManyToOne(targetEntity=Subject::class)
      */
     private $subject;
 
     /**
+     * @Assert\NotBlank(message="Моля, изберете град")
      * @ORM\ManyToOne(targetEntity=City::class, inversedBy="teachers")
      */
     private $city;
