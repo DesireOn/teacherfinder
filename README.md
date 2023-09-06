@@ -1,6 +1,6 @@
 # TeacherFinder
 
-A project, built on Symfony MVC + twig.
+A project, built on Symfony MVC + twig. Docker is being used for local development.
 
 
 To get it working, follow these steps:
